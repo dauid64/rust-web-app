@@ -2,4 +2,6 @@
 
 RUST_LOG="rust_web_app=debug"
 
+SERVICE_DB_URL="postgres://app_user:dev_only_pwd@localhost/app_db"
+
 SERVICE_WEB_FOLDER="web-folder/"
