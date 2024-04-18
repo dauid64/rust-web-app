@@ -5,7 +5,7 @@ use serde_json::json;
 
 #[tokio::main]
 async fn main() -> Result<()> {
-	let hc = httpc_test::new_client("http://localhost:8080")?;
+	let hc = httpc_test::new_client("http://localhost:8000")?;
 
 	hc.do_get("/index.html").await?.print().await?;
 
@@ -22,5 +22,5 @@ async fn main() -> Result<()> {
 }
 
 // cargo watch -q -c -w src/ -w .cargo/ -x run
-// cargo watch -q -c -w examples/ -x "run --example quick_dev"
+// cargo watch -q -c -x "test -- --nocapture"
 // docker run --rm --name pg -p 5432:5432 -e POSTGRES_PASSWORD=welcome postgres:15
