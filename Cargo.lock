@@ -1533,6 +1533,7 @@ dependencies = [
  "serde_json",
  "serde_with",
  "serial_test",
+ "sqlb",
  "sqlx",
  "strum_macros",
  "tokio",
@@ -1827,6 +1828,30 @@ name = "spin"
 version = "0.9.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6980e8d7511241f8acf4aebddbb1ff938df5eebe98691418c4468d0b72a96a67"
+
+[[package]]
+name = "sqlb"
+version = "0.3.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "563da6bfb9f5926b051d9d574dfa9a26429d015a169e9e3bf527da0e8fe28b09"
+dependencies = [
+ "async-trait",
+ "sqlb-macros",
+ "sqlx",
+ "time",
+ "uuid",
+]
+
+[[package]]
+name = "sqlb-macros"
+version = "0.3.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "628938c5fd81f6c05916a7bdf609eec390db39e08b34360e98c807dd0a196739"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.59",
+]
 
 [[package]]
 name = "sqlformat"

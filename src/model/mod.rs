@@ -1,5 +1,6 @@
 // region:    --- Modules
 
+mod base;
 mod error;
 mod store;
 pub mod task;
