@@ -18,9 +18,19 @@ async fn main() -> Result<()> {
 	);
 	req_login.await?.print().await?;
 
+	let req_logoff = hc.do_post(
+		"/api/logoff",
+		json!({
+			"logoff": true
+		}),
+	);
+	req_logoff.await?.print().await?;
+
+	hc.do_get("/hello").await?.print().await?;
+
 	Ok(())
 }
 
-// cargo watch -q -c -w src/ -w .cargo/ -x run
+//  cargo watch -q -c -w src/ -w .cargo/ -x run
 // cargo watch -q -c -x "test -- --nocapture"
 // docker run --rm --name pg -p 5432:5432 -e POSTGRES_PASSWORD=welcome postgres:15

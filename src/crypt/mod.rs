@@ -1,5 +1,6 @@
 mod error;
 pub mod pwd;
+pub mod token;
 
 pub use self::error::{Error, Result};
 
@@ -17,7 +18,7 @@ pub fn encrypt_into_b64u(
 ) -> Result<String> {
     let EncryptContet { content, salt } = env_content;
 
-    let mut hmac_sha512 = Hmac::<Sha512>::new_from_slice(key).map_err(|_| Error::KeyFaiHmac)?;
+    let mut hmac_sha512 = Hmac::<Sha512>::new_from_slice(key).map_err(|_| Error::KeyFailHmac)?;
 
     hmac_sha512.update(content.as_bytes());
     hmac_sha512.update(salt.as_bytes());
