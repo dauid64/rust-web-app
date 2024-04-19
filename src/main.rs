@@ -21,7 +21,7 @@ pub use config::config;
 use crate::model::ModelManager;
 use crate::web::mw_auth::{mw_ctx_require, mw_ctx_resolve};
 use crate::web::mw_res_map::mw_reponse_map;
-use crate::web::{routes_login, routes_static};
+use crate::web::{routes_login, routes_static, rpc};
 use axum::{middleware, Router};
 use tracing::info;
 use tracing_subscriber::EnvFilter;
@@ -45,24 +45,24 @@ async fn main() -> Result<()> {
 	let mm = ModelManager::new().await?;
 
 	// -- Define Routes
-	// let routes_rpc = rpc::routes(mm.clone())
-	//   .route_layer(middleware::from_fn(mw_ctx_require));
+	let routes_rpc = rpc::routes(mm.clone())
+	  .route_layer(middleware::from_fn(mw_ctx_require));
 
-	let routes_hello = Router::new()
-		.route("/hello", get(|| async { Html("Hello Worlds") }))
-		.route_layer(middleware::from_fn(mw_ctx_require));
+	// let routes_hello = Router::new()
+	// 	.route("/hello", get(|| async { Html("Hello Worlds") }))
+	// 	.route_layer(middleware::from_fn(mw_ctx_require));
 
 	let routes_all = Router::new()
 		.merge(routes_login::routes(mm.clone()))
-		.merge(routes_hello)
-		// .nest("/api", routes_rpc)
+		// .merge(routes_hello)
+		.nest("/api", routes_rpc)
 		.layer(middleware::map_response(mw_reponse_map))
 		.layer(middleware::from_fn_with_state(mm.clone(), mw_ctx_resolve))
 		.layer(CookieManagerLayer::new())
 		.fallback_service(routes_static::serve_dir());
 
 	// region:    --- Start Server
-	let addr = SocketAddr::from(([127, 0, 0, 1], 8000));
+	let addr = SocketAddr::from(([127, 0, 0, 1], 8080));
 	info!("->> {:<12} - {addr}\n", "LISTENING");
 	axum::Server::bind(&addr)
 		.serve(routes_all.into_make_service())

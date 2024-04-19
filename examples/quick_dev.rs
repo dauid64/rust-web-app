@@ -5,7 +5,7 @@ use serde_json::json;
 
 #[tokio::main]
 async fn main() -> Result<()> {
-	let hc = httpc_test::new_client("http://localhost:8000")?;
+	let hc = httpc_test::new_client("http://localhost:8080")?;
 
 	hc.do_get("/index.html").await?.print().await?;
 
@@ -24,9 +24,60 @@ async fn main() -> Result<()> {
 			"logoff": true
 		}),
 	);
-	req_logoff.await?.print().await?;
 
-	hc.do_get("/hello").await?.print().await?;
+	let req_create_task = hc.do_post(
+		"/api/rpc",
+		json!({
+			"id": 1,
+			"method": "create_task",
+			"params": {
+				"data": {
+					"title": "task AAA"
+				}
+			}
+		}),
+	);
+	req_create_task.await?.print().await?;
+
+	let req_edit_task = hc.do_post(
+		"/api/rpc",
+		json!({
+			"id": 1,
+			"method": "update_task",
+			"params": {
+				"id": 1000,
+				"data": {
+					"title": "task BB"
+				}
+			}
+		}),
+	);
+	req_edit_task.await?.print().await?;
+
+	let req_delete_task = hc.do_post(
+		"/api/rpc",
+		json!({
+			"id": 1,
+			"method": "delete_task",
+			"params": {
+				"id": 1001
+			}
+		})
+	);
+	req_delete_task.await?.print().await?;
+
+	let req_list_tasks = hc.do_post(
+		"/api/rpc",
+		json!({
+			"id": 1,
+			"method": "list_tasks"
+		})
+	);
+	req_list_tasks.await?.print().await?;
+
+	// req_logoff.await?.print().await?;
+
+	// hc.do_get("/hello").await?.print().await?;
 
 	Ok(())
 }
